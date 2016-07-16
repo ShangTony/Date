@@ -1,0 +1,79 @@
+.navbar{
+    padding-right: 15px;
+    padding-left: 15px;
+    background-color: #e6e6e6;
+    height: 50px;
+}
+
+h3{
+    color: seagreen;
+    margin-top: 0px;
+    font-weight: bolder;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+h4{
+    color: #030303;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.top{
+    margin-top: 60px;
+}
+
+.carousel {
+    height: 300px;
+    margin-bottom: 60px;
+    margin-left: 500px;
+}
+/* Since positioning the image, we need to help out the caption */
+.carousel-caption {
+    z-index: 10;
+}
+
+/* Declare heights because of positioning of img element */
+.carousel .item {
+    height: 300px;
+    background-color: white;
+}
+.carousel-inner > .item > img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    min-width:  100%;
+    height: 300px;
+}
+
+.headcontent h2{
+    text-align: center;
+}
+.headcontent{
+    margin-bottom: 20px;
+    margin-top: -30px;
+}
+
+.panel-body h4{
+
+}
+.body1{
+    padding: 5px;
+    padding-left: 25px;
+    margin: 0px;
+    background-color: mediumturquoise;
+}
+.body2{
+    padding: 5px;
+    padding-left: 25px;
+    margin: 0px;
+    background-color: darksalmon;
+}
+
+.panel-body{
+    padding: 0px;
+}
+
+.list-group{
+    padding-left: 0;
+    margin-bottom: 0;
+}
+
+

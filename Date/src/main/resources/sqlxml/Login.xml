@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+       Copyright 2009-2012 the original author or authors.
+
+       Licensed under the Apache License, Version 2.0 (the "License");
+       you may not use this file except in compliance with the License.
+       You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+       Unless required by applicable law or agreed to in writing, software
+       distributed under the License is distributed on an "AS IS" BASIS,
+       WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+       See the License for the specific language governing permissions and
+       limitations under the License.
+
+-->
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Login">
+
+  <resultMap type="edu.graduation.bean.User" id="LoginResult">
+    <id column="ID" jdbcType="INTEGER" property="id"/>
+    <result column="NAME" jdbcType="VARCHAR" property="name"/>
+    <result column="PASSWORD" jdbcType="VARCHAR" property="password"/>
+    <result column="SHOWNAME" jdbcType="VARCHAR" property="showName"/>
+    <result column="BIRTHDAY" jdbcType="VARCHAR" property="birthday"/>
+    <result column="SEX" jdbcType="VARCHAR" property="sex"/>
+      <result column="IMGPATH" jdbcType="VARCHAR" property="imgPath"/>
+      <collection property="DatingList"  resultMap="Dating.DatingResult"/>
+      <collection property="messageList"  resultMap="Login.LoginResult"/>
+  </resultMap>
+
+  <select id="LoginMessage" parameterType="edu.graduation.bean.User" resultMap="LoginResult">
+       select ID,NAME,PASSWORD,SHOWNAME,IMGPATH,SEX,BIRTHDAY from User where NAME=#{name} and PASSWORD=#{password}
+  </select>
+
+    <select id="applyName" parameterType="String" resultMap="LoginResult">
+        select NAME from User where Name=#{name}
+    </select>
+
+    <select id="applyCall" parameterType="String" resultMap="LoginResult">
+        select SHOWNAME from User where SHOWNAME=#{showName}
+    </select>
+
+    <select id="userDateList" parameterType="edu.graduation.bean.User" resultMap="LoginResult">
+        select D.ID D_ID,D.NAME D_NAME,D.PLACE,D.TIME,D.ISVALID,D.PHOTOPATH,u.ID,u.NAME,u.SHOWNAME,u.BIRTHDAY,u.IMGPATH,u.SEX from User as u left join DATING as D on u.ID=D.AUTHORID where u.ID=#{id};
+    </select>
+
+    <insert id="insertUser" parameterType="edu.graduation.bean.User" >
+        insert into User(NAME,PASSWORD,SHOWNAME) VALUES (#{name},#{password},#{showName})
+    </insert>
+    <update id="updateImgPath" parameterType="edu.graduation.bean.User" >
+        update User set IMGPATH=#{imgPath} where NAME=#{name}
+    </update>
+
+    <update id="modifyUser" parameterType="edu.graduation.bean.User">
+        UPDATE User set NAME=#{name},SHOWNAME=#{showName},BIRTHDAY=#{birthday},SEX=#{sex} where ID=#{id}
+    </update>
+
+    <select id="userList" parameterType="edu.graduation.bean.User" resultMap="LoginResult">
+        select ID,NAME,SHOWNAME,BIRTHDAY,SEX from User where 1=1
+       <if test="name!=null and !&quot;&quot;.equals(name.trim())">
+            and name like '%' #{name} '%'
+        </if>
+        <if test="showName!=null and !&quot;&quot;.equals(showName.trim())">
+            and showName like '%' #{showName} '%'
+        </if>
+    </select>
+
+    <delete id="deleteOneUser" parameterType="int">
+        delete from User where ID = #{_parameter}
+    </delete>
+
+      <delete id="deleteBatchUser" parameterType="java.util.List">
+            delete from User where ID in (
+            <foreach collection="list" item="item" separator=",">
+           #{item}
+          </foreach>
+            )
+      </delete>
+
+    <select id="showAuthorInfo" parameterType="edu.graduation.bean.User" resultMap="LoginResult">
+         SELECT ID,SHOWNAME,SEX,IMGPATH FROM USER WHERE ID=#{id}
+    </select>
+
+</mapper>

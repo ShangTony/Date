@@ -1,0 +1,49 @@
+*{
+    margin:0px;
+    padding:0px;
+}
+
+.top{
+    width:100%;
+    height:50px;
+    background-color: white;
+}
+
+
+.top-content{
+    width:75%;
+    height:50px;
+    margin:0px auto;
+}
+h1,h3,p,a,button{
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.onepage{
+    margin-top: auto;
+    width:100%;
+    height: 750px;
+    background-color: white;
+}
+
+.onepage-bg{
+    height: 100%;
+    width: 100%;
+    positon:absolute;
+    background-position: center center;
+    background-size: cover;
+}
+
+#onepagebg{
+    background-image: url("../img/Go.jpg");
+}
+
+.headh1content{
+    margin-top: 100px;
+    line-height:75px;
+}
+
+.headfontsize h1{
+    font-size:50pt;
+    color:#ffffff;
+}

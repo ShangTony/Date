@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+       Copyright 2009-2012 the original author or authors.
+
+       Licensed under the Apache License, Version 2.0 (the "License");
+       you may not use this file except in compliance with the License.
+       You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+       Unless required by applicable law or agreed to in writing, software
+       distributed under the License is distributed on an "AS IS" BASIS,
+       WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+       See the License for the specific language governing permissions and
+       limitations under the License.
+
+-->
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Dating">
+
+    <resultMap type="edu.graduation.bean.Dating" id="DatingResult">
+        <id column="D_ID" jdbcType="INTEGER" property="id"/>
+        <result column="D_NAME" jdbcType="VARCHAR" property="name"/>
+        <result column="TIME" jdbcType="DATE" property="time"/>
+        <result column="PLACE" jdbcType="VARCHAR" property="place"/>
+        <result column="NUM" jdbcType="INTEGER" property="num"/>
+        <result column="DESCRIPTION" jdbcType="VARCHAR" property="description"/>
+        <result column="PHOTOPATH" jdbcType="VARCHAR" property="photoPath"/>
+        <result column="AUTHORID" jdbcType="INTEGER" property="authorId"/>
+        <result column="CATEGORY" jdbcType="VARCHAR" property="category"/>
+        <result column="ISVALID" jdbcType="VARCHAR" property="isValid"/>
+        <collection property="messageList"  resultMap="Message.MessageResult"/>
+        <collection property="userList"  resultMap="Login.LoginResult"/>
+    </resultMap>
+
+    <insert id="insertDating" parameterType="edu.graduation.bean.Dating" >
+        insert into DATING(NAME,TIME,PLACE,DESCRIPTION,AUTHORID,PHOTOPATH,CATEGORY) VALUES (#{name},#{time},#{place},#{description},#{authorId},#{photoPath},#{category})
+    </insert>
+
+    <select id="selectDateId" parameterType="edu.graduation.bean.Dating" resultMap="DatingResult">
+         select ID D_ID,NAME D_NAME,TIME,PLACE,NUM,DESCRIPTION,PHOTOPATH,AUTHORID from DATING where PHOTOPATH=#{photoPath}
+    </select>
+
+    <select id="showDateList" parameterType="edu.graduation.bean.Dating" resultMap="DatingResult">
+        select ID D_ID,NAME D_NAME,TIME,PLACE,NUM,DESCRIPTION,PHOTOPATH,AUTHORID from DATING WHERE ISVALID='授权' order by NUM DESC limit 8
+    </select>
+
+    <select id="showDateWithId" parameterType="edu.graduation.bean.Dating" resultMap="DatingResult">
+        select ID D_ID,NAME D_NAME,TIME,PLACE,NUM,DESCRIPTION,PHOTOPATH,AUTHORID from DATING where ID=#{id}
+    </select>
+
+
+    <select id="showMessageList" parameterType="edu.graduation.bean.Dating" resultMap="DatingResult">
+        select D.ID D_ID,D.NAME D_NAME,D.TIME,D.PLACE,D.NUM,D.DESCRIPTION,D.PHOTOPATH,D.AUTHORID,U.SHOWNAME,U.IMGPATH,M.MESSAGEID,M.CONTENT,M.MESSAGETIME,M.WRITEID,M.DATINGID
+        from DATING as D left join MESSAGE as M on D.ID=M.DATINGID left join User as U on M.WRITEID=U.ID WHERE D.ID=#{id}
+        order by M.MESSAGEID DESC
+    </select>
+
+    <delete id="deleteOne" parameterType="int">
+        delete from DATING where ID = #{_parameter}
+    </delete>
+
+    <select id="placeSearch" parameterType="edu.graduation.bean.Dating" resultMap="DatingResult">
+        select ID D_ID,NAME D_NAME,TIME,PLACE,NUM,DESCRIPTION,PHOTOPATH,AUTHORID from DATING where ISVALID='授权'
+        <if test="place!=null and !&quot;&quot;.equals(place.trim())">
+            and PLACE like '%' #{place} '%'
+        </if>
+    </select>
+
+    <select id="descriptionSearch" parameterType="edu.graduation.bean.Dating" resultMap="DatingResult">
+        select ID D_ID,NAME D_NAME,TIME,PLACE,NUM,DESCRIPTION,PHOTOPATH,AUTHORID from DATING where ISVALID='授权'
+        <if test="description!=null and !&quot;&quot;.equals(description.trim())">
+            and DESCRIPTION like '%' #{description} '%'
+        </if>
+    </select>
+
+    <select id="timeSearch" parameterType="edu.graduation.bean.Dating" resultMap="DatingResult">
+        select ID D_ID,NAME D_NAME,TIME,PLACE,NUM,DESCRIPTION,PHOTOPATH,AUTHORID from DATING where ISVALID='授权'
+        <if test="time!=null">
+            and TIME=#{time}
+        </if>
+    </select>
+
+    <select id="adminDateList" parameterType="edu.graduation.bean.Dating" resultMap="DatingResult">
+        select ID D_ID,NAME D_NAME,TIME,PLACE,DESCRIPTION,AUTHORID,ISVALID from DATING where 1=1
+        <if test="name!=null and !&quot;&quot;.equals(name.trim())">
+            and NAME like '%' #{name} '%'
+        </if>
+        <if test="place!=null and !&quot;&quot;.equals(place.trim())">
+            and PLACE like '%' #{place} '%'
+        </if>
+        ORDER BY ID DESC
+    </select>
+
+    <delete id="deleteOneDate" parameterType="int">
+        delete from DATING where ID = #{_parameter}
+    </delete>
+
+    <delete id="deleteBatchDate" parameterType="java.util.List">
+        delete from DATING where ID in (
+        <foreach collection="list" item="item" separator=",">
+            #{item}
+        </foreach>
+        )
+    </delete>
+
+    <update id="updateNum" parameterType="edu.graduation.bean.Dating" >
+        update DATING set NUM=#{num} where ID=#{id}
+    </update>
+
+    <select id="selectCategory" parameterType="edu.graduation.bean.Dating" resultMap="DatingResult">
+        select ID D_ID,NAME D_NAME,TIME,PLACE,NUM,DESCRIPTION,PHOTOPATH,AUTHORID from DATING WHERE CATEGORY=#{category} and ISVALID='授权'
+    </select>
+    
+    <update id="makeValid" parameterType="int">
+        UPDATE DATING set ISVALID='授权' where ID=#{_parameter}
+    </update>
+
+</mapper>

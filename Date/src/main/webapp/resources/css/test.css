@@ -1,0 +1,19 @@
+.panel{
+    width: 350px;
+    height:400px;
+    margin-top: 120px;
+    margin-left: 100px;
+   /* background-color: rgba(242, 241, 136, 0.2);
+    border-radius: 15px 60px;*/
+}
+
+
+
+.list-group-item{
+    background-color: rgba(252, 251, 199, 0.2);
+}
+
+.input-group .form-control{
+    background-color: transparent;
+    border: 0px;
+}
